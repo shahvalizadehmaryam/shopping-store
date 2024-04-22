@@ -1,6 +1,18 @@
+import ProductCard from "../components/ProductCard";
+import { useProducts } from "../context/ProductsContext";
+import  styles  from "./ProductsPage.module.css";
+
 const ProductsPage = () => {
+    const products = useProducts();
+    console.log(products)
     return ( 
-        <h3>ProductsPage</h3>
+       <div className={styles.container}>
+        <div className={styles.products}>
+            {!products.length && <p>Loading...</p>}
+            {products.map((p) => <ProductCard key={p.id} product={p} />)}
+        </div>
+        <div>sidebar</div>
+       </div>
      );
 }
  
