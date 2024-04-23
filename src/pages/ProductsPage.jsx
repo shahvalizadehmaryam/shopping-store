@@ -5,6 +5,7 @@ import { useProducts } from "../context/ProductsContext";
 import styles from "./ProductsPage.module.css";
 import { ImSearch } from "react-icons/im";
 import { FaListUl } from "react-icons/fa";
+import { filterProducts, searchedProducts } from "../helper/helper";
 
 
 const ProductsPage = () => {
@@ -18,8 +19,11 @@ const ProductsPage = () => {
     setDisplayed(products)
   },[products])
 
+  // فیلتر چند مرحله ای محصولات
   useEffect(()=>{
-    console.log(query)
+    let finalProducts = searchedProducts(products,query.search);
+    finalProducts = filterProducts(finalProducts,query.category);
+    setDisplayed(finalProducts)
   },[query])
 
   const searchHandler = () => {
@@ -41,8 +45,8 @@ const ProductsPage = () => {
       </div>
       <div className={styles.container}>
         <div className={styles.products}>
-          {!products.length && <Loader />}
-          {products.map((p) => (
+          {!displayed.length && <Loader />}
+          {displayed.map((p) => (
             <ProductCard key={p.id} product={p} />
           ))}
         </div>
