@@ -1,48 +1,43 @@
+
 import { useEffect, useState } from "react";
 import Loader from "../components/Loader";
 import ProductCard from "../components/ProductCard";
 import { useProducts } from "../context/ProductsContext";
 import styles from "./ProductsPage.module.css";
-import { ImSearch } from "react-icons/im";
-import { FaListUl } from "react-icons/fa";
-import { filterProducts, searchedProducts } from "../helper/helper";
-
+import {
+  filterProducts,
+  getInitialQuery,
+  searchedProducts,
+} from "../helper/helper";
+import { useSearchParams } from "react-router-dom";
+import SearchBox from "../components/SearchBox";
+import Sidebar from "../components/Sidebar";
 
 const ProductsPage = () => {
   const products = useProducts();
   const [search, setSearch] = useState("");
-  const [displayed , setDisplayed] = useState(products);
-  const [query , setQuery] = useState({});
+  const [displayed, setDisplayed] = useState(products);
+  const [query, setQuery] = useState({});
+  const [searchParams, setSearchParams] = useSearchParams();
   console.log(products);
 
-  useEffect(()=>{
-    setDisplayed(products)
-  },[products])
+  useEffect(() => {
+    setDisplayed(products);
+    // during refresh page url has params
+    setQuery(getInitialQuery(searchParams));
+  }, [products]);
 
   // فیلتر چند مرحله ای محصولات
-  useEffect(()=>{
-    let finalProducts = searchedProducts(products,query.search);
-    finalProducts = filterProducts(finalProducts,query.category);
-    setDisplayed(finalProducts)
-  },[query])
-
-  const searchHandler = () => {
-    setQuery((query) => ({...query , search}))
-  }
-  const categoryHandler = (event) => {
-    const {tagName} = event.target;
-    const category = event.target.innerText.toLowerCase();
-    setQuery((query) => ({...query , category}))
-    if(tagName !== "LI") return;
-  }
+  useEffect(() => {
+    setSearchParams(query);
+    setSearch(query.search || "")
+    let finalProducts = searchedProducts(products, query.search);
+    finalProducts = filterProducts(finalProducts, query.category);
+    setDisplayed(finalProducts);
+  }, [query]);
   return (
     <>
-      <div>
-        <input type="text" onChange={(e) => setSearch(e.target.value.toLowerCase().trim())} value={search} placeholder="Search..." />
-        <button onClick={searchHandler}>
-        <ImSearch />
-        </button>
-      </div>
+     <SearchBox search={search} setSearch={setSearch} setQuery={setQuery} />
       <div className={styles.container}>
         <div className={styles.products}>
           {!displayed.length && <Loader />}
@@ -50,19 +45,7 @@ const ProductsPage = () => {
             <ProductCard key={p.id} product={p} />
           ))}
         </div>
-        <div>
-            <div>
-                <FaListUl />
-                <p>Categories</p>
-            </div>
-            <ul onClick={categoryHandler}>
-                <li>All</li>
-                <li>Electronics</li>
-                <li>Jewelery</li>
-                <li>Men's clothing</li>
-                <li>Women's clothing</li>
-            </ul>
-        </div>
+        <Sidebar setQuery={setQuery} />
       </div>
     </>
   );
