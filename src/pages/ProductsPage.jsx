@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Loader from "../components/Loader";
 import ProductCard from "../components/ProductCard";
 import { useProducts } from "../context/ProductsContext";
@@ -10,14 +10,25 @@ import { FaListUl } from "react-icons/fa";
 const ProductsPage = () => {
   const products = useProducts();
   const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("");
+  const [displayed , setDisplayed] = useState(products);
+  const [query , setQuery] = useState({});
   console.log(products);
+
+  useEffect(()=>{
+    setDisplayed(products)
+  },[products])
+
+  useEffect(()=>{
+    console.log(query)
+  },[query])
+
   const searchHandler = () => {
-    console.log("clicked")
+    setQuery((query) => ({...query , search}))
   }
   const categoryHandler = (event) => {
     const {tagName} = event.target;
     const category = event.target.innerText.toLowerCase();
+    setQuery((query) => ({...query , category}))
     if(tagName !== "LI") return;
   }
   return (
