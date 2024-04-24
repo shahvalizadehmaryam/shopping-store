@@ -2,8 +2,13 @@ import { Link } from "react-router-dom";
 import styles from "./ProductCard.module.css";
 import { TbListDetails, TbShoppingBagCheck } from "react-icons/tb";
 import { shortenText } from "../helper/helper";
+import { useCarts } from "../context/CartContext";
 const ProductCard = ({ product }) => {
   const { id, title, price, image } = product;
+  const [state,dispatch] = useCarts();
+  const cartHandler = () => {
+    dispatch({type:"Add",payload:data})
+  }
   return (
     <div key={id} className={styles.card}>
       <img src={image} alt={title} />
@@ -14,7 +19,7 @@ const ProductCard = ({ product }) => {
           <TbListDetails />
         </Link>
         <div>
-          <button>
+          <button onClick={cartHandler}>
             <TbShoppingBagCheck />
           </button>
         </div>
