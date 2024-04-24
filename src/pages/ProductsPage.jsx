@@ -45,7 +45,7 @@ const ProductsPage = () => {
             <ProductCard key={p.id} product={p} />
           ))}
         </div>
-        <Sidebar setQuery={setQuery} />
+        <Sidebar query={query} setQuery={setQuery} />
       </div>
     </>
   );
