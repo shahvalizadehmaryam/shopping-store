@@ -32,11 +32,18 @@ const createQueryObject = (currQuery, newQuery) => {
 // agar user category va search o zade bad safhero refresh karde bayad dar url data ha bemune va napare ta ba asase un data be user neshun dade beshe.
 const getInitialQuery = (searchParams) => {
   const query = {};
-  const search = searchParams.get("search"); 
+  const search = searchParams.get("search");
   const category = searchParams.get("category");
   if (search) query.search = search;
   if (category) query.category = category;
   return query;
+};
+const sumProducts = (products) => {
+  const itemsCounter = products.reduce((acc, cur) => acc + cur.quantity, 0);
+  const total = products
+    .reduce((acc, cur) => acc + cur.price * cur.quantity, 0)
+    .toFixed(2);
+  return { itemsCounter, total };
 };
 export {
   shortenText,
@@ -44,4 +51,5 @@ export {
   filterProducts,
   createQueryObject,
   getInitialQuery,
+  sumProducts,
 };

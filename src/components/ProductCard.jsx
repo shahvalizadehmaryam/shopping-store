@@ -6,8 +6,9 @@ import { useCarts } from "../context/CartContext";
 const ProductCard = ({ product }) => {
   const { id, title, price, image } = product;
   const [state,dispatch] = useCarts();
+  console.log(state)
   const cartHandler = () => {
-    dispatch({type:"Add",payload:data})
+    dispatch({type:"ADD_ITEM",payload:product})
   }
   return (
     <div key={id} className={styles.card}>
