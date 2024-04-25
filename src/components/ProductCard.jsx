@@ -4,6 +4,7 @@ import { TbListDetails, TbShoppingBagCheck } from "react-icons/tb";
 import { productQuantity, shortenText } from "../helper/helper";
 import { useCarts } from "../context/CartContext";
 import { MdDeleteOutline } from "react-icons/md";
+
 const ProductCard = ({ product }) => {
   const { id, title, price, image } = product;
   const [state, dispatch] = useCarts();
